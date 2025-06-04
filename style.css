@@ -1,0 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul li a:hover {
+        color: #46b077 !important;
+      }
+
+      ul li a {
+        color: #eeeeed !important;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: large;
+        font-weight: 100;
+      }
+
+      .img-txt {
+        width: 30px;
+        height: 40px;
+      }
+
+ /* Scrollbar for WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0f7fa; /* light water blue */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0077be, #00bcd4); /* water gradient */
+  border-radius: 6px;
+  border: 2px solid #e0f7fa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #005f8f, #00acc1); /* darker on hover */
+}
+
+/* Firefox support */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #00bcd4 #e0f7fa;
+}
