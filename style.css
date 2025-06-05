@@ -2,6 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    /* overflow-y: hidden; */
+    /* text-overflow: hide; */
+}
+html, body{
+  overflow-x: hidden !important;
 }
 
 ul li a:hover {
@@ -46,4 +52,32 @@ body {
   scrollbar-color: #00bcd4 #e0f7fa;
 }
 
+.gradient-custom {
 
+background: -webkit-linear-gradient(to right bottom, #46b077, #22201f); 
+background: linear-gradient(to right bottom, #46b077, #22201f);
+} 
+
+#pc {
+  border-top-left-radius: .5rem !important; 
+  border-bottom-left-radius: .5rem !important;
+}
+
+.btn4 {
+  /* background-color: #46b077; */
+  color: #46b077;
+  border: none;
+  padding: 0.2em 2em;
+  border-radius: 0.3em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: solid 1px #46b077;
+  text-decoration: none;
+  
+}
+
+.btn4:hover {
+  background-color: #388e5c;
+  color: #22201f;
+}
