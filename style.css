@@ -575,17 +575,17 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #46b077, #388e5c);
+  background: linear-gradient(135deg, #0A3D62, #1E6FA8, #3FA9F5, #6ECFF6, #EAF6FF);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #388e5c, #46b077);
+  background: linear-gradient(135deg, #EAF6FF, #6ECFF6, #3FA9F5, #1E6FA8, #0A3D62);
 }
 
 body {
   scrollbar-width: thin;
-  scrollbar-color: #46b077 #f1f1f1;
+  scrollbar-color: #3FA9F5 #f1f1f1;
 }
 
 /* ============================================
@@ -1060,35 +1060,38 @@ section::after {
   }
 }
 
-/* Section Title Wave Effect */
-section h3 {
+/* Section Title Left-to-Right Highlighting Animation */
+section h3,
+section .h3 {
   position: relative;
   display: inline-block;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
-section h3::after {
+section h3::after,
+section .h3::after {
   content: '';
   position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
+  bottom: -8px;
+  left: -100%;
+  width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(70, 176, 119, 0.8), 
-    transparent);
-  animation: titleWave 2s ease-in-out infinite;
+  background: #46b077;
+  animation: leftToRightSweep 2s ease-in-out infinite;
 }
 
-@keyframes titleWave {
-  0%, 100% {
-    width: 0;
+@keyframes leftToRightSweep {
+  0% {
+    left: -100%;
     opacity: 0;
   }
   50% {
-    width: 100px;
     opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
   }
 }
 
