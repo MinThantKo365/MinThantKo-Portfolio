@@ -1289,7 +1289,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; text-align: center; margin-top: 30px; }
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
   .hero-social { justify-content: center; }
@@ -1300,7 +1300,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .capabilities-grid { grid-template-columns: 1fr; }
   .skills-grid, .skills-grid--4 { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
 }
 
 @media (max-width: 768px) {

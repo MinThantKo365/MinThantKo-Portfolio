@@ -19,6 +19,7 @@
   const contactForm = document.getElementById('contact-form');
   const submitBtn = document.getElementById('submit-btn');
   const formSuccess = document.getElementById('form-success');
+  const formSubmitError = document.getElementById('form-submit-error');
   const typingText = document.getElementById('typing-text');
 
   const TITLES = ['Full Stack Developer', 'Database Architect', 'Cloud Enthusiast'];
@@ -232,6 +233,29 @@
     return !error;
   }
 
+  function getLocalAccessKey() {
+    const key = window.PORTFOLIO_CONFIG?.web3formsAccessKey?.trim();
+    return key && key !== 'YOUR_ACCESS_KEY' ? key : null;
+  }
+
+  async function submitContactForm(payload) {
+    const localKey = getLocalAccessKey();
+
+    if (localKey) {
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+      formData.append('access_key', localKey);
+      formData.append('from_name', 'Min Thant Ko Portfolio');
+      return fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+    }
+
+    return fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+
   function initContactForm() {
     if (!contactForm) return;
     const fields = ['name', 'email', 'subject', 'message'];
@@ -251,18 +275,45 @@
       submitBtn.classList.add('loading');
       submitBtn.disabled = true;
       formSuccess.hidden = true;
+      if (formSubmitError) formSubmitError.hidden = true;
 
-      await new Promise(r => setTimeout(r, 1800));
+      const payload = Object.fromEntries(
+        fields.map(field => [field, document.getElementById(field).value.trim()])
+      );
 
-      submitBtn.classList.remove('loading');
-      submitBtn.disabled = false;
-      formSuccess.hidden = false;
-      contactForm.reset();
-      fields.forEach(f => {
-        document.getElementById(f)?.classList.remove('error');
-        const err = document.getElementById(`${f}-error`);
-        if (err) err.textContent = '';
-      });
+      try {
+        const response = await submitContactForm(payload);
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error('API_UNAVAILABLE');
+        }
+
+        if (data.success) {
+          formSuccess.hidden = false;
+          contactForm.reset();
+          fields.forEach(f => {
+            document.getElementById(f)?.classList.remove('error');
+            const err = document.getElementById(`${f}-error`);
+            if (err) err.textContent = '';
+          });
+        } else if (formSubmitError) {
+          formSubmitError.textContent = data.message || 'Failed to send message. Please try again.';
+          formSubmitError.hidden = false;
+        }
+      } catch (err) {
+        if (formSubmitError) {
+          formSubmitError.textContent = err.message === 'API_UNAVAILABLE' || err instanceof TypeError
+            ? 'Contact form is not available. Add config.js for local testing, or deploy to Vercel with WEB3FORMS_ACCESS_KEY set.'
+            : 'Network error. Please check your connection and try again.';
+          formSubmitError.hidden = false;
+        }
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
     });
   }
 
