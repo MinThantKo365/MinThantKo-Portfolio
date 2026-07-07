@@ -239,20 +239,20 @@
   }
 
   async function submitContactForm(payload) {
-    const localKey = getLocalAccessKey();
-
-    if (localKey) {
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
-      formData.append('access_key', localKey);
-      formData.append('from_name', 'Min Thant Ko Portfolio');
-      return fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+    const accessKey = getLocalAccessKey();
+    if (!accessKey) {
+      throw new Error('MISSING_KEY');
     }
 
-    return fetch('/api/contact', {
+    const formData = new FormData();
+    Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+    formData.append('access_key', accessKey);
+    formData.append('from_name', 'Min Thant Ko Portfolio');
+
+    return fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: { Accept: 'application/json' },
+      body: formData
     });
   }
 
@@ -305,9 +305,13 @@
         }
       } catch (err) {
         if (formSubmitError) {
-          formSubmitError.textContent = err.message === 'API_UNAVAILABLE' || err instanceof TypeError
-            ? 'Contact form is not available. Add config.js for local testing, or deploy to Vercel with WEB3FORMS_ACCESS_KEY set.'
-            : 'Network error. Please check your connection and try again.';
+          if (err.message === 'MISSING_KEY') {
+            formSubmitError.textContent = 'Web3Forms key is missing. Add config.js locally or WEB3FORMS_ACCESS_KEY in Vercel, then redeploy.';
+          } else if (err.message === 'API_UNAVAILABLE' || err instanceof TypeError) {
+            formSubmitError.textContent = 'Could not reach the form service. Please try again.';
+          } else {
+            formSubmitError.textContent = 'Network error. Please check your connection and try again.';
+          }
           formSubmitError.hidden = false;
         }
       } finally {
