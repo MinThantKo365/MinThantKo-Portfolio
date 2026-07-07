@@ -248,6 +248,7 @@
     Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
     formData.append('access_key', accessKey);
     formData.append('from_name', 'Min Thant Ko Portfolio');
+    formData.append('botcheck', '');
 
     return fetch('https://api.web3forms.com/submit', {
       method: 'POST',
@@ -288,6 +289,9 @@
         try {
           data = await response.json();
         } catch {
+          if (response.status === 403) {
+            throw new Error('DOMAIN_BLOCKED');
+          }
           throw new Error('API_UNAVAILABLE');
         }
 
@@ -306,9 +310,11 @@
       } catch (err) {
         if (formSubmitError) {
           if (err.message === 'MISSING_KEY') {
-            formSubmitError.textContent = 'Web3Forms key is missing. Add config.js locally or WEB3FORMS_ACCESS_KEY in Vercel, then redeploy.';
+            formSubmitError.textContent = 'Web3Forms key is missing. For local: copy config.example.js to config.js. For Vercel: set WEB3FORMS_ACCESS_KEY and redeploy.';
+          } else if (err.message === 'DOMAIN_BLOCKED') {
+            formSubmitError.textContent = 'Web3Forms blocked this domain. Contact Web3Forms support to approve min-thant-ko-portfolio.vercel.app, or add a custom domain.';
           } else if (err.message === 'API_UNAVAILABLE' || err instanceof TypeError) {
-            formSubmitError.textContent = 'Could not reach the form service. Please try again.';
+            formSubmitError.textContent = 'Could not reach Web3Forms. Hard-refresh the page (Ctrl+Shift+R) and try again.';
           } else {
             formSubmitError.textContent = 'Network error. Please check your connection and try again.';
           }
