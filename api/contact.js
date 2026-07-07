@@ -3,9 +3,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+  const accessKey = process.env.WEB3FORMS_ACCESS_KEY?.trim().replace(/^["']|["']$/g, '');
   if (!accessKey) {
-    return res.status(500).json({ success: false, message: 'Server configuration error' });
+    return res.status(500).json({
+      success: false,
+      message: 'WEB3FORMS_ACCESS_KEY is missing. Add it in Vercel → Settings → Environment Variables, then redeploy.'
+    });
   }
 
   const { name, email, subject, message } = req.body || {};
