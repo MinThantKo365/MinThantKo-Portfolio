@@ -35,13 +35,6 @@ const distDir = path.join(rootDir, 'dist');
 loadEnvFile(path.join(rootDir, '.env'));
 loadEnvFile(path.join(rootDir, '.env.local'));
 
-const key = process.env.WEB3FORMS_ACCESS_KEY?.trim().replace(/^["']|["']$/g, '');
-
-if (!key) {
-  console.error('Missing WEB3FORMS_ACCESS_KEY environment variable.');
-  process.exit(1);
-}
-
 fs.rmSync(distDir, { recursive: true, force: true });
 fs.mkdirSync(distDir, { recursive: true });
 
@@ -52,12 +45,19 @@ for (const file of siteFiles) {
 
 copyRecursive(path.join(rootDir, 'source_file'), path.join(distDir, 'source_file'));
 
-const configContents = `window.PORTFOLIO_CONFIG = {
-  web3formsAccessKey: '${key}'
+const key = process.env.WEB3FORMS_ACCESS_KEY?.trim().replace(/^["']|["']$/g, '');
+
+if (key) {
+  const configContents = `window.PORTFOLIO_CONFIG = {
+  web3formsAccessKey: ${JSON.stringify(key)}
 };
 `;
-
-fs.writeFileSync(path.join(rootDir, 'config.js'), configContents);
-fs.writeFileSync(path.join(distDir, 'config.js'), configContents);
-
-console.log('Built dist/ and generated config.js for deployment.');
+  fs.writeFileSync(path.join(rootDir, 'config.js'), configContents);
+  // Local/static hosts can use this file; on Cloudflare Workers, /config.js is served by worker.js.
+  fs.writeFileSync(path.join(distDir, 'config.js'), configContents);
+  console.log('Built dist/ and generated config.js from WEB3FORMS_ACCESS_KEY.');
+} else {
+  console.log(
+    'Built dist/. WEB3FORMS_ACCESS_KEY not set — on Cloudflare, set it as a Worker secret/variable so /config.js is served at runtime.'
+  );
+}
