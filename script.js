@@ -310,7 +310,7 @@
       } catch (err) {
         if (formSubmitError) {
           if (err.message === 'MISSING_KEY') {
-            formSubmitError.textContent = 'Web3Forms key is missing. For local: copy config.example.js to config.js. For Vercel: set WEB3FORMS_ACCESS_KEY and redeploy.';
+            formSubmitError.textContent = 'Web3Forms key is missing. Set WEB3FORMS_ACCESS_KEY, run npm run build, then deploy.';
           } else if (err.message === 'DOMAIN_BLOCKED') {
             formSubmitError.textContent = 'Web3Forms blocked this domain. Contact Web3Forms support to approve min-thant-ko-portfolio.vercel.app, or add a custom domain.';
           } else if (err.message === 'API_UNAVAILABLE' || err instanceof TypeError) {

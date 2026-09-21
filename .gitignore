@@ -1,3 +1,7 @@
 config.js
 .env
 .env.local
+.wrangler
+.wrangler-dry-run
+dist
+node_modules

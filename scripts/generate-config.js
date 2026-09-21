@@ -17,7 +17,21 @@ function loadEnvFile(filePath) {
   }
 }
 
+function copyRecursive(src, dest) {
+  const stat = fs.statSync(src);
+  if (stat.isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const entry of fs.readdirSync(src)) {
+      copyRecursive(path.join(src, entry), path.join(dest, entry));
+    }
+    return;
+  }
+  fs.copyFileSync(src, dest);
+}
+
 const rootDir = path.join(__dirname, '..');
+const distDir = path.join(rootDir, 'dist');
+
 loadEnvFile(path.join(rootDir, '.env'));
 loadEnvFile(path.join(rootDir, '.env.local'));
 
@@ -28,11 +42,22 @@ if (!key) {
   process.exit(1);
 }
 
-const configPath = path.join(rootDir, 'config.js');
-const contents = `window.PORTFOLIO_CONFIG = {
+fs.rmSync(distDir, { recursive: true, force: true });
+fs.mkdirSync(distDir, { recursive: true });
+
+const siteFiles = ['index.html', 'style.css', 'script.js'];
+for (const file of siteFiles) {
+  fs.copyFileSync(path.join(rootDir, file), path.join(distDir, file));
+}
+
+copyRecursive(path.join(rootDir, 'source_file'), path.join(distDir, 'source_file'));
+
+const configContents = `window.PORTFOLIO_CONFIG = {
   web3formsAccessKey: '${key}'
 };
 `;
 
-fs.writeFileSync(configPath, contents);
-console.log('Generated config.js for deployment.');
+fs.writeFileSync(path.join(rootDir, 'config.js'), configContents);
+fs.writeFileSync(path.join(distDir, 'config.js'), configContents);
+
+console.log('Built dist/ and generated config.js for deployment.');
