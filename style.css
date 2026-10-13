@@ -1132,70 +1132,51 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .project-image { height: 140px; }
 }
 
-/* ---- Experience Timeline ---- */
-.timeline {
-  position: relative;
-  max-width: 700px;
+/* ---- Experience ---- */
+.experience-list {
+  max-width: 920px;
   margin: 0 auto;
-  padding-left: 40px;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 7px; top: 8px; bottom: 8px;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--blue-300), var(--blue-500), var(--blue-700));
-  border-radius: 2px;
-}
-
-.timeline-item { position: relative; margin-bottom: 36px; }
-.timeline-item:last-child { margin-bottom: 0; }
-
-.timeline-marker {
-  position: absolute;
-  left: -40px; top: 8px;
-  width: 16px; height: 16px;
-  background: var(--white);
-  border: 3px solid var(--blue-500);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--blue-100);
-  z-index: 1;
-}
-
-.timeline-content {
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
-.timeline-content:hover { box-shadow: var(--shadow-md); }
-
-.timeline-duration {
-  display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--blue-500);
-  background: var(--blue-100);
-  padding: 4px 12px;
-  border-radius: 50px;
-  margin-bottom: 12px;
+.experience-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 32px 40px;
 }
 
-.timeline-content h3 {
+.experience-item + .experience-item {
+  border-top: 1px solid var(--border);
+}
+
+.experience-item h3 {
   font-family: var(--font-heading);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: var(--blue-900);
   margin-bottom: 6px;
+  line-height: 1.3;
 }
 
-.timeline-company { font-weight: 600; color: var(--blue-700); margin-bottom: 6px; }
-.timeline-location { font-size: 0.88rem; color: var(--text-muted); }
-.timeline-location i { margin-right: 6px; color: var(--blue-500); }
+.experience-item p {
+  font-size: 1.02rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.experience-item span {
+  flex-shrink: 0;
+  padding-top: 4px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--blue-700);
+  white-space: nowrap;
+}
 
 /* ---- Contact ---- */
 .contact-grid {
@@ -1522,6 +1503,18 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px 16px;
   }
+
+  .experience-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 24px 22px;
+  }
+
+  .experience-item h3 { font-size: 1.25rem; }
+  .experience-item p,
+  .experience-item span { font-size: 1rem; }
+  .experience-item span { padding-top: 0; white-space: normal; }
 }
 
 @media (max-width: 480px) {
@@ -1532,8 +1525,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .about-card { padding: 24px; }
   .contact-form { padding: 24px; }
   .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
-  .timeline { padding-left: 32px; }
-  .timeline-marker { left: -32px; }
+  .experience-list { border-radius: var(--radius); }
+  .experience-item { padding: 22px 18px; }
 
   .navbar { padding: 0 16px; }
   .nav-logo-text { font-size: 1.05rem; }
